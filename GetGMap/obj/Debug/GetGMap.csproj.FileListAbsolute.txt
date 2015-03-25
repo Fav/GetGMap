@@ -1,0 +1,12 @@
+c:\users\administrator\documents\visual studio 2012\Projects\GetGMap\GetGMap\bin\Debug\GetGMap.exe.config
+c:\users\administrator\documents\visual studio 2012\Projects\GetGMap\GetGMap\bin\Debug\GetGMap.exe
+c:\users\administrator\documents\visual studio 2012\Projects\GetGMap\GetGMap\bin\Debug\GetGMap.pdb
+c:\users\administrator\documents\visual studio 2012\Projects\GetGMap\GetGMap\obj\Debug\GetGMap.csprojResolveAssemblyReference.cache
+c:\users\administrator\documents\visual studio 2012\Projects\GetGMap\GetGMap\obj\Debug\GetGMap.Properties.Resources.resources
+c:\users\administrator\documents\visual studio 2012\Projects\GetGMap\GetGMap\obj\Debug\GetGMap.csproj.GenerateResource.Cache
+c:\users\administrator\documents\visual studio 2012\Projects\GetGMap\GetGMap\obj\Debug\GetGMap.exe
+c:\users\administrator\documents\visual studio 2012\Projects\GetGMap\GetGMap\obj\Debug\GetGMap.pdb
+c:\users\administrator\documents\visual studio 2012\Projects\GetGMap\GetGMap\obj\Debug\GetGMap.MainForm.resources
+C:\Users\Administrator\Documents\Visual Studio 2012\Projects\GetGMap1\GetGMap\bin\Debug\GetGMap.exe.config
+C:\Users\Administrator\Documents\Visual Studio 2012\Projects\GetGMap1\GetGMap\obj\Debug\GetGMap.exe
+C:\Users\Administrator\Documents\Visual Studio 2012\Projects\GetGMap1\GetGMap\obj\Debug\GetGMap.pdb
