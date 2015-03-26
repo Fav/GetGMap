@@ -10,3 +10,5 @@ c:\users\administrator\documents\visual studio 2012\Projects\GetGMap\GetGMap\obj
 C:\Users\Administrator\Documents\Visual Studio 2012\Projects\GetGMap1\GetGMap\bin\Debug\GetGMap.exe.config
 C:\Users\Administrator\Documents\Visual Studio 2012\Projects\GetGMap1\GetGMap\obj\Debug\GetGMap.exe
 C:\Users\Administrator\Documents\Visual Studio 2012\Projects\GetGMap1\GetGMap\obj\Debug\GetGMap.pdb
+C:\Users\Administrator\documents\visual studio 2012\Projects\GetGMap\GetGMap\bin\Debug\MapUtil.dll
+C:\Users\Administrator\documents\visual studio 2012\Projects\GetGMap\GetGMap\bin\Debug\MapUtil.pdb

@@ -7,9 +7,9 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GetGMap
+namespace MapUtil
 {
-   public class GetImgByHttp
+   public class CGetImgByHttp
     {
         public static Image GetImage(string url)
         {

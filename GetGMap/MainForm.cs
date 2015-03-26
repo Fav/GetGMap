@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MapUtil;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -22,20 +23,21 @@ namespace GetGMap
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            for (int i = 1; i < 19; i++)
-            {
-                int level = i;
-                var lon = 113.6;
-                var lat = 34.8;
+            //for (int i = 1; i < 19; i++)
+            //{
+            //    int level = i;
+            //    var lon = 113.6;
+            //    var lat = 34.8;
 
-                url = GoogleImage.GetImageUrl(level, lon, lat);
-                //webBrowser1.Url = new Uri(url);
-                Image img = GetImgByHttp.GetImage(url);
-                pictureBox1.Image = img;
-                string file = string.Format(@"C:\1\{0}.png", i);
-                if (img!=null)
-                    img.Save(file, System.Drawing.Imaging.ImageFormat.Png);
-            }
+            //    url = CGoogleImage.GetImageUrl(level, lon, lat);
+            //    //webBrowser1.Url = new Uri(url);
+            //    Image img = CGetImgByHttp.GetImage(url);
+            //    pictureBox1.Image = img;
+            //    string file = string.Format(@"C:\1\{0}.png", i);
+            //    if (img!=null)
+            //        img.Save(file, System.Drawing.Imaging.ImageFormat.Png);
+            //}
+            CGoogleImage.GetPicByRect(18, 113.61, 34.81, 113.63, 34.83);
 
         }
 
