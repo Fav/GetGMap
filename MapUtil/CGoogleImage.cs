@@ -10,6 +10,9 @@ namespace MapUtil
 {
     public class CGoogleImage
     {
+        public delegate void ProcessInfoHandler(int sum,int index);
+        public event ProcessInfoHandler  ProcessInfo;
+
         static Dictionary<int, double> s_TdtScale = new Dictionary<int, double>(){
 		        {18,0.597164283559817},
 		        {17,1.19432856685505},
@@ -129,6 +132,9 @@ namespace MapUtil
                 return;
             }
             Graphics g = Graphics.FromImage(unionImg);
+            int countInRow =  rowEnd-rowStart+1;//一行有多少瓦片
+            int countRow = colEnd-colStart+1;   //有多少行
+            int sum = countInRow * countRow;
             for (int i = rowStart; i <= rowEnd; i++)
             {
                 for (int j = colStart; j <= colEnd; j++)
@@ -142,11 +148,22 @@ namespace MapUtil
                         g.DrawImage(img, (i - rowStart) * 256, (j - colStart) * 256);
                         img.Dispose();
                     }
+                    else
+                    {
+                        //输出下载出错信息
+                        OutLog("i*j 下载失败");
+                    }
+                    if (ProcessInfo!=null)
+                        ProcessInfo(sum, countInRow * (i - rowStart) + j - colStart + 1);
                 }
             }
             g.Dispose();
             unionImg.Save(string.Format( @"{0}\union{1}.png", fileDir,level));
             unionImg.Dispose();
+        }
+
+        private void OutLog(string p)
+        {
         }
 
     }
