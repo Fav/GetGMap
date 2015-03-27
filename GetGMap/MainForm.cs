@@ -37,7 +37,7 @@ namespace GetGMap
             //    if (img!=null)
             //        img.Save(file, System.Drawing.Imaging.ImageFormat.Png);
             //}
-            CGoogleImage.GetPicByRect(18, 113.61, 34.81, 113.63, 34.83);
+            (new CGoogleImage(@"c:\1")).GetPicByRect(17, 113.371386, 30.405576, 113.549035, 30.314833);
 
         }
 

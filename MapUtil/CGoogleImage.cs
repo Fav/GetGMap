@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -30,9 +31,26 @@ namespace MapUtil
 		        {1,78271.5169639999}};
         const double c_topTileFromX = -20037508.3427892;
         const double c_topTileFromY = 20037508.3427892;
+
+        const int c_limitWidth = 12800; //bitmap尺寸有限制，这里设置成12800
+        const int c_sidelength = 256;
         static string dir = "http://mt3.google.cn/vt/lyrs=s&hl=zh-CN&gl=cn&";
         //var dir = "http://mt0.google.cn/vt/lyrs=m@167000000&hl=zh-CN&gl=cn&";
 
+
+        string fileDir = "";
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="filedir">图片保存的目录</param>
+        public CGoogleImage(string filedir)
+        {
+            if (Directory.Exists(filedir))
+            {
+                Directory.CreateDirectory(filedir);
+            }
+            fileDir = filedir;
+        }
         /// <summary>
         /// 
         /// </summary>
@@ -40,7 +58,7 @@ namespace MapUtil
         /// <param name="lon">经度</param>
         /// <param name="lat">纬度</param>
         /// <returns></returns>
-        public static string GetImageUrl(int level, double lon, double lat)
+        public string GetImageUrl(int level, double lon, double lat)
         {
             int xnum;
             int ynum;
@@ -48,7 +66,7 @@ namespace MapUtil
             return GetUrl(level, xnum, ynum);
         }
 
-        private static string GetUrl(int level, int xnum, int ynum)
+        private string GetUrl(int level, int xnum, int ynum)
         {
             return dir + string.Format("x={0}&y={1}&z={2}", xnum, ynum, level);
         }
@@ -61,7 +79,7 @@ namespace MapUtil
         /// <param name="lat"></param>
         /// <param name="row"></param>
         /// <param name="col"></param>
-        public static void GetRowColIndex(int level, double lon, double lat, out int row, out int col)
+        public void GetRowColIndex(int level, double lon, double lat, out int row, out int col)
         {
             row = 0;
             col = 0;
@@ -72,32 +90,63 @@ namespace MapUtil
             col = (int)Math.Round((c_topTileFromY - lat1) / coef);
         }
 
-        public static void GetPicByRect(int level, double lonLeft, double latTop, double lonRight, double latBottom)
+        public void GetPicByRect(int level, double lonLeft, double latTop, double lonRight, double latBottom)
         {
             int rowStart;
             int colStart;
             int rowEnd;
             int colEnd;
-            GetRowColIndex(level, lonLeft, latTop, out rowStart, out colEnd);
-            GetRowColIndex(level, lonRight, latBottom, out rowEnd, out colStart);
-            Image unionImg = new Bitmap(256 * (rowEnd + 1 - rowStart), 256 * (colEnd + 1 - colStart));
+            int x1;
+            int y1;
+            int x2;
+            int y2;
+            GetRowColIndex(level, lonLeft, latTop, out x1, out y1);
+            GetRowColIndex(level, lonRight, latBottom, out x2, out y2);
+            rowStart = Math.Min(x1, x2);
+            rowEnd = Math.Max(x1, x2);
+            colStart = Math.Min(y1, y2);
+            colEnd = Math.Max(y1, y2);
+            Image unionImg = null;
+            try
+            {
+                int width = c_sidelength * (rowEnd + 1 - rowStart);
+                if (width >c_limitWidth)
+                {
+                    width = c_limitWidth;
+                    rowEnd = c_limitWidth / c_sidelength + rowStart - 1;
+                }
+                int height =  c_sidelength * (colEnd + 1 - colStart);
+                if (height >c_limitWidth)
+                {
+                    height = c_limitWidth;
+                    colEnd = c_limitWidth / c_sidelength + colStart - 1;
+                }
+                unionImg = new Bitmap(width, height);
+            }
+            catch{}
+            if (unionImg == null)
+            {
+                return;
+            }
             Graphics g = Graphics.FromImage(unionImg);
             for (int i = rowStart; i <= rowEnd; i++)
             {
                 for (int j = colStart; j <= colEnd; j++)
                 {
-                    string url = GetUrl(level,i, j);
+                    string url = GetUrl(level, i, j);
                     Image img = CGetImgByHttp.GetImage(url);
-                    string file = string.Format(@"C:\1\{0}+{1}.png", i,j);
+                    string file = string.Format(@"{0}\{1}+{2}.png", fileDir,i, j);
                     if (img != null)
                     {
                         img.Save(file, System.Drawing.Imaging.ImageFormat.Png);
                         g.DrawImage(img, (i - rowStart) * 256, (j - colStart) * 256);
+                        img.Dispose();
                     }
                 }
             }
             g.Dispose();
-            unionImg.Save(@"C:\1\union.png");
+            unionImg.Save(string.Format( @"{0}\union{1}.png", fileDir,level));
+            unionImg.Dispose();
         }
 
     }
