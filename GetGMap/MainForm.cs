@@ -49,7 +49,7 @@ namespace GetGMap
         public void StartDownload()
         {
             img.ProcessInfo += img_ProcessInfo;
-            img.GetPicByRect(17, 113.371386, 30.405576, 113.549035, 30.314833);
+            img.GetPicByRect(12, 113.371386, 30.405576, 113.549035, 30.314833);
         } 
     }
 }

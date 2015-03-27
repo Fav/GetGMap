@@ -135,9 +135,9 @@ namespace MapUtil
             int countInRow =  rowEnd-rowStart+1;//一行有多少瓦片
             int countRow = colEnd-colStart+1;   //有多少行
             int sum = countInRow * countRow;
-            for (int i = rowStart; i <= rowEnd; i++)
+            for (int j = colStart; j <= colEnd; j++)
             {
-                for (int j = colStart; j <= colEnd; j++)
+                for (int i = rowStart; i <= rowEnd; i++)
                 {
                     string url = GetUrl(level, i, j);
                     Image img = CGetImgByHttp.GetImage(url);
@@ -154,7 +154,7 @@ namespace MapUtil
                         OutLog("i*j 下载失败");
                     }
                     if (ProcessInfo!=null)
-                        ProcessInfo(sum, countInRow * (i - rowStart) + j - colStart + 1);
+                        ProcessInfo(sum, countInRow * (j - colStart) + i - rowStart + 1);
                 }
             }
             g.Dispose();
