@@ -14,6 +14,8 @@ namespace MapUtil
         public event ProcessInfoHandler  ProcessInfo;
 
         static Dictionary<int, double> s_TdtScale = new Dictionary<int, double>(){
+		        {20,0.149291071},
+		        {19,0.298582142},
 		        {18,0.597164283559817},
 		        {17,1.19432856685505},
 		        {16,2.38865713397468},
@@ -31,7 +33,9 @@ namespace MapUtil
 		        {4,9783.93962049996},
 		        {3,19567.8792409999},
 		        {2,39135.7584820001},
-		        {1,78271.5169639999}};
+		        {1,78271.5169639999},
+                {0,156543.0339}
+        };
         const double c_topTileFromX = -20037508.3427892;
         const double c_topTileFromY = 20037508.3427892;
 
@@ -93,7 +97,7 @@ namespace MapUtil
             col = (int)Math.Round((c_topTileFromY - lat1) / coef);
         }
 
-        public void GetPicByRect(int level, double lonLeft, double latTop, double lonRight, double latBottom)
+        public void SavePicByRect(int level, double lonLeft, double latTop, double lonRight, double latBottom)
         {
             int rowStart;
             int colStart;
@@ -135,6 +139,7 @@ namespace MapUtil
             int countInRow =  rowEnd-rowStart+1;//一行有多少瓦片
             int countRow = colEnd-colStart+1;   //有多少行
             int sum = countInRow * countRow;
+            OutLog(DateTime.Now.ToString() + "错误瓦片行列号：");
             for (int j = colStart; j <= colEnd; j++)
             {
                 for (int i = rowStart; i <= rowEnd; i++)
@@ -144,14 +149,14 @@ namespace MapUtil
                     string file = string.Format(@"{0}\{1}+{2}.png", fileDir,i, j);
                     if (img != null)
                     {
-                        img.Save(file, System.Drawing.Imaging.ImageFormat.Png);
+                        //img.Save(file, System.Drawing.Imaging.ImageFormat.Png);
                         g.DrawImage(img, (i - rowStart) * 256, (j - colStart) * 256);
                         img.Dispose();
                     }
                     else
                     {
                         //输出下载出错信息
-                        OutLog("i*j 下载失败");
+                        OutLog(string.Format("{0},{1}",i,j));
                     }
                     if (ProcessInfo!=null)
                         ProcessInfo(sum, countInRow * (j - colStart) + i - rowStart + 1);
@@ -160,10 +165,21 @@ namespace MapUtil
             g.Dispose();
             unionImg.Save(string.Format( @"{0}\union{1}.png", fileDir,level));
             unionImg.Dispose();
+            OutLog( "下载结束\r\n");
+
+        }
+
+        private void SaveOnePic(int level, int i, int j)
+        {
+            throw new NotImplementedException();
         }
 
         private void OutLog(string p)
         {
+            using (StreamWriter  sw = new StreamWriter (string.Format( @"{0}\log.txt", fileDir),true))
+            {
+                sw.WriteLine(p);
+            }
         }
 
     }
