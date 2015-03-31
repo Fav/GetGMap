@@ -28,18 +28,18 @@ namespace GetGMap
         {
         }
 
-        void img_ProcessInfo(int sum, int index)
+        void img_ProcessInfo(int level,int sum, int index)
         {
             if (this.InvokeRequired&& !this.IsDisposed &&this.IsHandleCreated)
             {
                 //只是不抛出异常了  BeginInvoke
-                 this.BeginInvoke(new CGoogleImage.ProcessInfoHandler(img_ProcessInfo), new object[] { sum, index });
+                 this.BeginInvoke(new CGoogleImage.ProcessInfoHandler(img_ProcessInfo), new object[] {level, sum, index });
             }
             else
             {
                 progressBar1.Maximum = sum;
                 progressBar1.Value = index;
-                label1.Text = string.Format("{0}/{1}", index, sum);
+                label1.Text = string.Format("第{0}级:{1}/{2}", level, index, sum);
             }
         }
         private void button1_Click(object sender, EventArgs e)
@@ -49,33 +49,84 @@ namespace GetGMap
                 OutWarning("路径不能为空");
                 return;
             }
-            List<int> lstLevel = GetLevel();
+            lstLevel = GetLevel();
+            if (lstLevel.Count==0)
+            {
+                OutWarning("请选择下载的等级");
+                return;
+            }
+            if ( !CheckPoint(tbPoint1.Text,out x1,out y1))
+            {
+                OutWarning("左上角经纬度坐标错误");
+                return;
+            }
+            if (!CheckPoint(tbPoint2.Text, out x2, out y2))
+            {
+                OutWarning("右下角经纬度坐标错误");
+                return;
+            }
             tsslWarning.Text = "";
-
-
+            img = new CGoogleImage(_pathDir);
             Thread t = new Thread(StartDownload) { IsBackground = true };
             t.Start();
+        }
+        double x1, x2, y1, y2;
+        List<int> lstLevel = new List<int>();
+        private bool CheckPoint(string p,out double x,out double y)
+        {
+            x = 0d;
+            y = 0d;
+            if (string.IsNullOrEmpty(p))
+                return false;
+            try
+            {
+                string[] str = p.Split(',');
+                if (str.Length != 2)
+                    return false;
+                double.TryParse(str[0], out x);
+                double.TryParse(str[1], out y);
+            }
+            catch
+            {
+                return false;   
+            }
+            return true;
         }
 
         private List<int> GetLevel()
         {
-            throw new NotImplementedException();
+            List<int> lst = new List<int>();
+            foreach (CheckBox cb in panelLevel.Controls)
+            {
+                if (cb.Checked)
+                {
+                    lst.Add(int.Parse(cb.Text));
+                }
+            }
+            return lst;
         }
 
         private void OutWarning(string p)
         {
-            throw new NotImplementedException();
+            tsslWarning.Text ="警告："+ p;
         }
-        CGoogleImage img = new CGoogleImage(@"c:\1");
+        CGoogleImage img;
         // 开始下载
         public void StartDownload()
         {
+            if (img == null)
+                return;
             img.ProcessInfo += img_ProcessInfo;
+            lstLevel.Sort();
+            foreach (int level in lstLevel)
+            {
+                img.SavePicByRect(level, x1, y1, x2, y2);
+            }
             //for (int i = 1; i <= 16; i++)
             //{
             //    img.GetPicByRect(i, 113.371386, 30.405576, 113.549035, 30.314833);
             //}
-            img.SavePicByRect(20, 113.371386, 30.405576, 113.549035, 30.314833);
+            //img.SavePicByRect(20, 113.371386, 30.405576, 113.549035, 30.314833);
             MessageBox.Show("完成");
         }
 

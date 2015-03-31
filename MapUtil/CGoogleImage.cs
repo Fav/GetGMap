@@ -10,7 +10,7 @@ namespace MapUtil
 {
     public class CGoogleImage
     {
-        public delegate void ProcessInfoHandler(int sum,int index);
+        public delegate void ProcessInfoHandler(int level, int sum,int index);
         public event ProcessInfoHandler  ProcessInfo;
 
         static Dictionary<int, double> s_TdtScale = new Dictionary<int, double>(){
@@ -139,7 +139,7 @@ namespace MapUtil
             int countInRow =  rowEnd-rowStart+1;//一行有多少瓦片
             int countRow = colEnd-colStart+1;   //有多少行
             int sum = countInRow * countRow;
-            OutLog(DateTime.Now.ToString() + "错误瓦片行列号：");
+            OutLog(DateTime.Now.ToString() + " 错误瓦片行列号：");
             for (int j = colStart; j <= colEnd; j++)
             {
                 for (int i = rowStart; i <= rowEnd; i++)
@@ -159,7 +159,7 @@ namespace MapUtil
                         OutLog(string.Format("{0},{1}",i,j));
                     }
                     if (ProcessInfo!=null)
-                        ProcessInfo(sum, countInRow * (j - colStart) + i - rowStart + 1);
+                        ProcessInfo(level,sum, countInRow * (j - colStart) + i - rowStart + 1);
                 }
             }
             g.Dispose();
